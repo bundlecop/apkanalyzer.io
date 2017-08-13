@@ -10,58 +10,7 @@ import Tree from '../components/Tree';
 
 export default class IndexPage extends React.Component {
   state = {
-    openZip: null,
-    dopenZip: {
-      name: '',
-      children: [
-        {name: 'test', children: [
-          {name: 'test', children: [
-            {name: 'test', children: [
-              {name: 'test', children: [
-                {name: 'test', children: [
-                ]}
-              ]}
-            ]}
-          ]},
-          {name: 'test', children: [
-            {name: 'test', children: [
-              {name: 'test', children: [
-                {name: 'test', children: [
-                ]}
-              ]},
-              {name: 'test', children: [
-                {name: 'test', children: [
-                ]}
-              ]},
-              {name: 'test', children: [
-                {name: 'test', children: [
-                ]},
-                {name: 'test', children: [
-                ]},
-                {name: 'test', children: [
-                ]}
-              ]},
-              {name: 'test', children: [
-                {name: 'test', children: [
-                ]},
-                {name: 'test', children: [
-                ]},
-                {name: 'test', children: [
-                ]}
-              ]}
-            ]}
-          ]},
-          {name: 'test', children: [
-            {name: 'test', children: [
-              {name: 'test', children: [
-                {name: 'test', children: [
-                ]}
-              ]}
-            ]}
-          ]}
-        ]}
-      ]
-    }
+    openZip: null
   };
 
   render() {
@@ -72,7 +21,7 @@ export default class IndexPage extends React.Component {
   }
 
   renderAnalyzer() {
-    return <div>
+    return <div style={{height: '100%'}}>
       <Tree
         data={this.state.openZip}
         rowComponent={props => {
@@ -94,13 +43,25 @@ export default class IndexPage extends React.Component {
     return <DropZone
       onDrop={this.onDrop}
       multiple={false}
+      className="IndexPage-DropZone"
     >
+      <h1>Android APK Analyzer</h1>
+      <h4>brought to you by BundleCop</h4>
+      <p>
+        You may have seen it as part of Android Studio, and now
+        it's right here, in your browser.
+      </p>
+      <p>
+        Just drop an APK file
+        here, and you'll see what's inside, and which files take
+        up most of the space. Try drop APK files, and we'll compare
+        the two.
+      </p>
     </DropZone>
   }
 
   onDrop = async files => {
     let zipContents = treeFromFlatPathList(await readZip(files[0]), 'name', {nameAttribute: 'relName'});
-    console.log(zipContents)
 
     // Fill in the missing sums
     function fillNode(node) {

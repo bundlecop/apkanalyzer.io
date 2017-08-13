@@ -3,37 +3,8 @@ import PropTypes from 'prop-types'
 import Link from 'gatsby-link'
 import Helmet from 'react-helmet'
 
-
 import './index.css'
-
-
-const Header = () =>
-  <div
-    style={{
-      background: 'rebeccapurple',
-      marginBottom: '1.45rem',
-    }}
-  >
-    <div
-      style={{
-        margin: '0 auto',
-        maxWidth: 960,
-        padding: '1.45rem 1.0875rem',
-      }}
-    >
-      <h1 style={{ margin: 0 }}>
-        <Link
-          to="/"
-          style={{
-            color: 'white',
-            textDecoration: 'none',
-          }}
-        >
-          Gatsby
-        </Link>
-      </h1>
-    </div>
-  </div>
+import '../typography';
 
 
 class TemplateWrapper extends React.Component {
@@ -41,13 +12,12 @@ class TemplateWrapper extends React.Component {
   render() {
     return <div>
         <Helmet
-          title="Gatsby Default Starter"
+          title="APK Size Analyzer"
           meta={[
-            { name: 'description', content: 'Sample' },
-            { name: 'keywords', content: 'sample, something' },
+            { name: 'description', content: 'Have a look inside an APK bundle, and figure out how to make it smaller.' },
+            { name: 'keywords', content: 'android apk, apk size, analyze apk, inspect apk, browse apk' },
           ]}
         />
-        <Header />
         <div
           style={{
             margin: '0 auto',
