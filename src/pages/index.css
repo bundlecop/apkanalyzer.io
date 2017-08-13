@@ -1,0 +1,4 @@
+.TreeItem {
+  display: flex;
+  flex-direction: row;
+}
