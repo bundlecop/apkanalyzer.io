@@ -1,0 +1,5 @@
+FROM node:8
+
+ADD . /repo
+RUN cd /repo && yarn
+RUN cd /repo && yarn run build
