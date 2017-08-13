@@ -3,8 +3,29 @@ import {GoogleFont, TypographyStyle} from 'typography-react'
 import typography from './typography';
 
 
+let stylesStr
+if (process.env.NODE_ENV === `production`) {
+  try {
+    stylesStr = require(`!raw-loader!../public/styles.css`)
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+
 export default class HTML extends React.Component {
   render () {
+    let css
+    if (process.env.NODE_ENV === `production`) {
+      css = (
+        <style
+          id="gatsby-inlined-css"
+          key="gatsby-inlined-css"
+          dangerouslySetInnerHTML={{ __html: stylesStr }}
+        />
+      )
+    }
+
     return (
       <html lang="en">
         <head>
@@ -17,6 +38,7 @@ export default class HTML extends React.Component {
           />
           <GoogleFont typography={typography} />
           <TypographyStyle typography={typography} />
+          {css}
           {this.props.headComponents}
         </head>
         <body>
