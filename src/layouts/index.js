@@ -1,13 +1,31 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Link from 'gatsby-link'
-import Helmet from 'react-helmet'
+import Helmet from 'react-helmet';
+import loadJS from '../utils/loadJS';
 
 import './index.css'
 import '../typography';
 
 
 class TemplateWrapper extends React.Component {
+
+  componentWillMount() {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    window.Geumja = window.Geumja || [];
+    window.Geumja.push(['set', {
+      wid: '25bd269c-c308-4f07-b6e4-c8b7366df894',
+      color: 'rgb(0, 0, 0)'
+    }]);
+    Geumja.push(['addTrigger', {
+      position: { bottom: 20, right: 50 }
+    }]);
+
+    loadJS('https://feedbackwidget.io/js');
+  }
 
   render() {
     return <div>
