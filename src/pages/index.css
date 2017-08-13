@@ -3,18 +3,30 @@
   flex-direction: row;
 }
 
+.PromptScreen {
+  background: #f7971e;
+  background: linear-gradient(to right, #f7971e, #ffd200);
+
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+
+  padding: 30px;
+}
+
+
+body a {
+  color: inherit;
+}
 
 .IndexPage-DropZone {
   border-width: 10px;
   border-color: white;
   border-style: dashed;
   border-radius: 5px;
-
-  position: absolute;
-  top: 50px;
-  right: 50px;
-  bottom: 50px;
-  left: 50px;
+  height: 100%;
 
   color: white;
   padding: 5%;
@@ -25,16 +37,29 @@
   justify-content: center;
 }
 
-
-body {
-  background: #f7971e;
-  background: linear-gradient(to right, #f7971e, #ffd200);
+.IndexPage-DropZone--accepting {
+  border-color: #4caf50;
 }
+
 
 body {
   background: #222222;
 }
 
+
+.AnalyzerScreen {
+  color: white;
+}
+
+.AnalyzerScreen button {
+  border-radius: 2px;
+  padding: 0.2em 0.6em;
+  font-size: 14px;
+  color: white;
+  background: #585858;;
+  margin-right: 20px;
+  border: 1px solid darkgrey;
+}
 
 .Analyzer {
   margin: 30px 0px;
@@ -47,4 +72,35 @@ body {
 .Analyzer .TreeItem {
   border-bottom: 1px solid rgba(255, 255, 255, 0.32);
   font-size: .7em;
+}
+
+button {
+  outline: none;
+  background: white;
+  padding: 17px;
+  border: 1px solid black;
+  border-radius: 30px;
+  cursor: pointer;
+  text-shadow: 1px 1px 2px rgba(34, 34, 34, 0.4);
+  transition: transform  0.1s ease-in-out;
+}
+button:hover {
+  transform: scale(1.1);
+}
+
+.Header {
+  margin: 30px 0px;
+  display: flex;
+  align-items: center;
+}
+
+.Footer {
+  font-size: 14px;
+}
+
+h1 {
+  margin: 0px;
+}
+h1 svg {
+  vertical-align: bottom;
 }

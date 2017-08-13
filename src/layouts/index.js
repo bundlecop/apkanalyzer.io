@@ -12,7 +12,7 @@ class TemplateWrapper extends React.Component {
   render() {
     return <div>
         <Helmet
-          title="APK Size Analyzer"
+          title="Android APK Size Analyzer"
           meta={[
             { name: 'description', content: 'Have a look inside an APK bundle, and figure out how to make it smaller.' },
             { name: 'keywords', content: 'android apk, apk size, analyze apk, inspect apk, browse apk' },
