@@ -6,6 +6,7 @@ import filesize from 'filesize';
 import DropZone from 'react-dropzone';
 import readZip, {treeFromFlatPathList} from '../components/parser';
 import Tree from '../components/Tree';
+import SampleAPK from './sampleAPK.json';
 
 
 export default class IndexPage extends React.Component {
@@ -21,9 +22,10 @@ export default class IndexPage extends React.Component {
   }
 
   renderAnalyzer() {
-    return <div style={{height: '100%'}}>
+    return <div className="Analyzer">
       <Tree
         data={this.state.openZip}
+        className={"Analyzer-Tree"}
         rowComponent={props => {
           return <div className="TreeItem">
             <div className="TreeCell" style={{flex: 1}}>
@@ -57,26 +59,20 @@ export default class IndexPage extends React.Component {
         up most of the space. Try drop APK files, and we'll compare
         the two.
       </p>
+      <button onClick={this.handleTrySample}>
+        Try a sample
+      </button>
     </DropZone>
+  }
+
+  handleTrySample = (e) => {
+    e.preventDefault();
+    fillNode(SampleAPK);
+    this.setState({openZip: SampleAPK});
   }
 
   onDrop = async files => {
     let zipContents = treeFromFlatPathList(await readZip(files[0]), 'name', {nameAttribute: 'relName'});
-
-    // Fill in the missing sums
-    function fillNode(node) {
-      const sums = {uncompressedSize: 0, compressedSize: 0};
-
-      for (let child of node.children) {
-        if (!child['uncompressedSize']) {
-          fillNode(child);
-        }
-        sums.uncompressedSize += child['uncompressedSize'];
-        sums.compressedSize += child['compressedSize'];
-      }
-
-      Object.assign(node, sums);
-    }
 
     fillNode(zipContents);
 
@@ -84,3 +80,19 @@ export default class IndexPage extends React.Component {
   }
 }
 
+
+
+// Fill in the missing sums
+function fillNode(node) {
+  const sums = {uncompressedSize: 0, compressedSize: 0};
+
+  for (let child of node.children) {
+    if (!child['uncompressedSize']) {
+      fillNode(child);
+    }
+    sums.uncompressedSize += child['uncompressedSize'];
+    sums.compressedSize += child['compressedSize'];
+  }
+
+  Object.assign(node, sums);
+}

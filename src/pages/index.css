@@ -30,3 +30,21 @@ body {
   background: #f7971e;
   background: linear-gradient(to right, #f7971e, #ffd200);
 }
+
+body {
+  background: #222222;
+}
+
+
+.Analyzer {
+  margin: 30px 0px;
+  padding: 20px;
+  border: 1px solid #FFC107;
+  border-radius: 5px;
+  color: white;
+}
+
+.Analyzer .TreeItem {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.32);
+  font-size: .7em;
+}
