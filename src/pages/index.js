@@ -269,8 +269,7 @@ export default class IndexPage extends React.Component {
     const mergedTree = diffTrees(leftTree, rightTree);
 
     fillTree(mergedTree);
-    sortBySize(mergedTree);
-    console.log(mergedTree);
+    sortBySize(mergedTree, true);
     this.setState({diffTree: mergedTree});
   }
 
@@ -283,7 +282,7 @@ export default class IndexPage extends React.Component {
 
     const mergedTree = diffTrees(leftTree, rightTree);
     fillTree(mergedTree);
-    sortBySize(mergedTree)
+    sortBySize(mergedTree, !!contentsRight)
 
     this.setState({diffTree: mergedTree, leftTree});
   }
@@ -339,16 +338,23 @@ function diffTrees(leftTree, rightTree, idAttr='name') {
 }
 
 
-// Sort all children by size
-function sortBySize(node) {
+// Sort all children by size; either absolute, or, if available, diff bytes.
+function sortBySize(node, byDiff=false) {
   node.children.sort((a, b) => {
+    if (byDiff) {
+      const diffBytesA = (a.right ? a.right.compressedSize : 0) - (a.left ? a.left.compressedSize : 0);
+      const diffBytesB = (b.right ? b.right.compressedSize : 0) - (b.left ? b.left.compressedSize : 0);
+      console.log(a.name, diffBytesA, b.name, diffBytesB)
+      return diffBytesB - diffBytesA;
+    }
+
     const aValue = a.left ? a.left.compressedSize : a.right.compressedSize;
     const bValue = b.left ? b.left.compressedSize : b.right.compressedSize;
     return bValue - aValue;
   })
 
   for (let child of node.children) {
-    sortBySize(child);
+    sortBySize(child, byDiff);
   }
 }
 
