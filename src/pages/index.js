@@ -27,8 +27,10 @@ export default class IndexPage extends React.Component {
   renderAnalyzer() {
     const diffTree = this.state.diffTree;
     const hasRight = !!diffTree.right;
+
     const fullSizeLeft = diffTree.left.compressedSize;
     const fullSizeRight = hasRight && diffTree.right.compressedSize;
+    const fullSizeDiff = hasRight && diffTree.right.compressedSize - diffTree.left.compressedSize;
 
     const intlFormat = new Intl.NumberFormat({ style: 'percent' });
 
@@ -67,9 +69,11 @@ export default class IndexPage extends React.Component {
             const {left, right} = props.data;
             const percentOfTotalLeft = left && (left.compressedSize / fullSizeLeft * 100);
             const percentOfTotalRight = right && (right.compressedSize / fullSizeRight * 100);
-            let diffBytes;
+
+            let diffBytes, percentOfTotalDiff;
             if (hasRight) {
               diffBytes = (right ? right.compressedSize : 0) - (left ? left.compressedSize : 0);
+              percentOfTotalDiff = Math.abs((diffBytes / fullSizeDiff * 100));
             }
 
             let classNames;
@@ -117,7 +121,17 @@ export default class IndexPage extends React.Component {
                 </div>
               }
 
-              {hasRight && <div className="TreeCell TreeCell-Diff">
+              {hasRight && <div className="TreeCell TreeCell-Diff" style={{
+                  background: `linear-gradient(
+                    to ${diffBytes > 0 ? 'right' : 'left'},
+                    transparent 0%,
+                    transparent 50%,
+                    rgba(128, 128, 128, 0.30) 50%,
+                    rgba(128, 128, 128, 0.30) ${50 + percentOfTotalDiff / 2}%,
+                    transparent ${50+percentOfTotalDiff / 2}%,
+                    transparent 100%
+                  )`
+                }}>
                 {diffBytes > 0 ? '+' : ''}{filesize(diffBytes)}
               </div>}
             </div>
