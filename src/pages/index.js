@@ -22,6 +22,9 @@ export default class IndexPage extends React.Component {
   }
 
   renderAnalyzer() {
+    const fullSize = this.state.openZip.compressedSize;
+    const intlFormat = new Intl.NumberFormat({ style: 'percent' });
+
     return <div className="AnalyzerScreen">
       <div className="Header">
         <h1 style={{flex: 1}}>
@@ -40,12 +43,18 @@ export default class IndexPage extends React.Component {
           data={this.state.openZip}
           className={"Analyzer-Tree"}
           rowComponent={props => {
+            const percentOfTotal = props.data.compressedSize / fullSize * 100;
             return <div className="TreeItem">
-              <div className="TreeCell" style={{flex: 1}}>
+              <div style={{flex: 1}}>
                 {props.data.relName}
               </div>
               <div className="TreeCell">
-                {filesize(props.data.uncompressedSize)}
+                {filesize(props.data.compressedSize)}
+              </div>
+              <div className="TreeCell" style={{
+                background: `linear-gradient(to left, #f7971e 0%, #ffd200 ${percentOfTotal}%, transparent ${percentOfTotal}%, transparent   100%)`
+              }}>
+                {intlFormat.format(percentOfTotal)} %
               </div>
             </div>
           }}
@@ -111,6 +120,7 @@ export default class IndexPage extends React.Component {
   handleTrySample = (e) => {
     e.preventDefault();
     fillNode(SampleAPK);
+    sortBySize(SampleAPK)
     this.setState({openZip: SampleAPK});
   }
 
@@ -123,6 +133,17 @@ export default class IndexPage extends React.Component {
   }
 }
 
+
+// Sort all children by size
+function sortBySize(node) {
+  node.children.sort((a, b) => {
+    return a.compressedSize < b.compressedSize
+  })
+
+  for (let child of node.children) {
+    sortBySize(child)
+  }
+}
 
 
 // Fill in the missing sums

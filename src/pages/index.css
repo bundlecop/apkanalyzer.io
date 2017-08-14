@@ -74,6 +74,14 @@ body {
   font-size: .7em;
 }
 
+.Analyzer .TreeCell {
+  width: 100px;
+  padding: 0 10px;
+  text-align: right;
+  /** Make it easier to read on gradient background. */
+  text-shadow: black 2px 2px 20px;
+}
+
 button {
   outline: none;
   background: white;
