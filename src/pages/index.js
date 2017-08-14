@@ -42,9 +42,10 @@ export default class IndexPage extends React.Component {
         <Tree
           data={this.state.openZip}
           className={"Analyzer-Tree"}
+          expandedIds={this.state.expandedIds}
           rowComponent={props => {
             const percentOfTotal = props.data.compressedSize / fullSize * 100;
-            return <div className="TreeItem">
+            return <div className="TreeItem" onClick={() => this.handleRowClick(props.data)}>
               <div style={{flex: 1}}>
                 {props.data.relName}
               </div>
@@ -59,6 +60,7 @@ export default class IndexPage extends React.Component {
             </div>
           }}
           getChildren={node => node.children}
+          getId={node => node.name}
         />
       </div>
       <div className="Footer">
@@ -108,6 +110,18 @@ export default class IndexPage extends React.Component {
     </div>
   }
 
+  handleRowClick = (data) => {
+    const newIds = this.state.expandedIds ? [...this.state.expandedIds] : [];
+    const idx = newIds.indexOf(data.name);
+    if (idx > -1) {
+      newIds.splice(idx, 1)
+    } else {
+      newIds.push(data.name);
+    }
+    console.log(newIds, data);
+    this.setState({expandedIds: newIds})
+  }
+
   handleStartOver = () => {
     this.setState({openZip: false})
   }
@@ -119,17 +133,18 @@ export default class IndexPage extends React.Component {
 
   handleTrySample = (e) => {
     e.preventDefault();
-    fillNode(SampleAPK);
-    sortBySize(SampleAPK)
-    this.setState({openZip: SampleAPK});
+    this.open(SampleAPK);
   }
 
   onDrop = async files => {
-    let zipContents = treeFromFlatPathList(await readZip(files[0]), 'name', {nameAttribute: 'relName'});
+    this.open(await readZip(files[0]));
+  }
 
-    fillNode(zipContents);
-
-    this.setState({openZip: zipContents});
+  open(contents) {
+    let asTree = treeFromFlatPathList(contents, 'name', {nameAttribute: 'relName'});
+    fillNode(asTree);
+    sortBySize(asTree)
+    this.setState({openZip: asTree});
   }
 }
 

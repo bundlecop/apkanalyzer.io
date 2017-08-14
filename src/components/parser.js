@@ -38,7 +38,11 @@ export function treeFromFlatPathList(pathObjects, attribute, options)
 
       // We need to create this level
       if (!dirLevel) {
-        node[childAttribute].push(dirLevel = {[nameAttribute]: item, [childAttribute]: []})
+        node[childAttribute].push(dirLevel = {
+          [nameAttribute]: item,
+          [childAttribute]: [],
+          [attribute]: path.slice(0, idx+1).join('/')
+        })
       }
       buildNodeRecursive(dirLevel, path, dataObject, idx + 1);
     }

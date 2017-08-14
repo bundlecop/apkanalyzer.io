@@ -5,12 +5,18 @@ import './Tree.css';
 export default class Tree extends React.Component {
   static propTypes = {
     data: T.any.isRequired,
+    getId: T.func.isRequired,
     getChildren: T.func.isRequired,
-    rowComponent: T.any.isRequired
+    rowComponent: T.any.isRequired,
+    expandedIds: T.arrayOf(T.any)
   };
 
+  defaultProps = {
+    expandedIds: null
+  }
+
   render() {
-    const {getChildren, rowComponent: RowComponent, data} = this.props;
+    const {getChildren, getId, expandedIds, rowComponent: RowComponent, data} = this.props;
 
     const elems = [];
     function build(children, level, parentIdx) {
@@ -21,7 +27,10 @@ export default class Tree extends React.Component {
         >
           <RowComponent data={child} />
         </Item>);
-        build(getChildren(child), level+1, `${parentIdx}-${idx}`)
+
+        if (expandedIds && expandedIds.indexOf(getId(child)) > -1) {
+          build(getChildren(child), level+1, `${parentIdx}-${idx}`)
+        }
       });
     }
     build(getChildren(data), 0, "r")
