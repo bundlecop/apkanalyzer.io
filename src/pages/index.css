@@ -85,6 +85,20 @@ body {
   background: rgba(62, 59, 59, 0.4);
 }
 
+.Analyzer .TreeItem--unchanged {
+  color: rgba(255, 255, 255, 0.29);
+}
+.Analyzer .TreeItem--increased .TreeCell-Label, .Analyzer .TreeItem--increased .TreeCell-Diff {
+  color: #F44336;
+}
+.Analyzer .TreeItem--decreased .TreeCell-Label, .Analyzer .TreeItem--decreased .TreeCell-Diff {
+  color: #4caf50;
+}
+
+.TreeCell .TreeCell-Flag {
+  font-size: .6em;
+  color: gray;
+}
 
 .Analyzer .TreeCell {
   width: 100px;
