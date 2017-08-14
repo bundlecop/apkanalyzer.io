@@ -71,6 +71,7 @@ export default class IndexPage extends React.Component {
       </div>
       <div className="Footer">
         Brought to you by <a href="https://bundlecop.com">BundleCop</a>.
+        You can find the source code of this tool <a href="https://github.com/bundlecop/apkanalyzer.io">on Github</a>.
       </div>
     </div>
   }
