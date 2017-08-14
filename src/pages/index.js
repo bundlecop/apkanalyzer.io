@@ -158,11 +158,11 @@ export default class IndexPage extends React.Component {
 // Sort all children by size
 function sortBySize(node) {
   node.children.sort((a, b) => {
-    return a.compressedSize < b.compressedSize
+    return b.compressedSize - a.compressedSize
   })
 
   for (let child of node.children) {
-    sortBySize(child)
+    sortBySize(child);
   }
 }
 
