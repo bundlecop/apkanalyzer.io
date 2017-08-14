@@ -103,6 +103,10 @@ export default class IndexPage extends React.Component {
             up most of the space. Drop <strong>two APK files</strong>, and we'll compare
             the two.
           </p>
+          <p>
+            <strong>Note: </strong> No data will be transferred. This
+            application is 100% client-side.
+          </p>
         </div>
         <div style={{marginTop: '20px'}}>
           <button onClick={this.handleTrySample}>
