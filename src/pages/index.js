@@ -344,7 +344,18 @@ function sortBySize(node, byDiff=false) {
     if (byDiff) {
       const diffBytesA = (a.right ? a.right.compressedSize : 0) - (a.left ? a.left.compressedSize : 0);
       const diffBytesB = (b.right ? b.right.compressedSize : 0) - (b.left ? b.left.compressedSize : 0);
-      console.log(a.name, diffBytesA, b.name, diffBytesB)
+
+      // No-change files should be sorted to the bottom
+      if ((diffBytesA === 0 && diffBytesB !== 0)) {
+        return 1;
+      }
+      else if ((diffBytesA !== 0 && diffBytesB === 0)) {
+        return -1;
+      }
+      else if ((diffBytesA === 0 && diffBytesB === 0)) {
+        return 0;
+      }
+
       return diffBytesB - diffBytesA;
     }
 
