@@ -72,7 +72,19 @@ body {
 .Analyzer .TreeItem {
   border-bottom: 1px solid rgba(255, 255, 255, 0.32);
   font-size: .7em;
+  align-items: center;
+  /** Required to enable text ellipsis. */
+  overflow: hidden;
 }
+
+.Analyzer .TreeItem--hasChildren {
+  cursor: pointer;
+}
+
+.Analyzer .TreeItem--hasChildren:hover {
+  background: rgba(62, 59, 59, 0.4);
+}
+
 
 .Analyzer .TreeCell {
   width: 100px;
@@ -80,6 +92,7 @@ body {
   text-align: right;
   /** Make it easier to read on gradient background. */
   text-shadow: black 2px 2px 20px;
+  flex-shrink: 0;
 }
 
 button {

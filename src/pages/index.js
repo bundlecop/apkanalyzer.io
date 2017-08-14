@@ -1,13 +1,15 @@
 import React from 'react'
 import Link from 'gatsby-link'
+import classnames from 'classnames';
 import './index.css';
 
 import filesize from 'filesize';
 import DropZone from 'react-dropzone';
 import readZip, {treeFromFlatPathList} from '../components/parser';
-import Tree from '../components/Tree';
+import Tree, {NodeExpander} from '../components/Tree';
 import SampleAPK from './sampleAPK.json';
 import AndroidIcon from './android.svgc';
+
 
 export default class IndexPage extends React.Component {
   state = {
@@ -45,8 +47,12 @@ export default class IndexPage extends React.Component {
           expandedIds={this.state.expandedIds}
           rowComponent={props => {
             const percentOfTotal = props.data.compressedSize / fullSize * 100;
-            return <div className="TreeItem" onClick={() => this.handleRowClick(props.data)}>
-              <div style={{flex: 1}}>
+            return <div
+              className={classnames("TreeItem", !props.isLeaf && 'TreeItem--hasChildren')}
+              onClick={() => !props.isLeaf && this.handleRowClick(props.data)}
+            >
+              <NodeExpander {...props} />
+              <div style={{flex: 1, textOverflow: 'ellipsis'}}>
                 {props.data.relName}
               </div>
               <div className="TreeCell">
@@ -118,7 +124,6 @@ export default class IndexPage extends React.Component {
     } else {
       newIds.push(data.name);
     }
-    console.log(newIds, data);
     this.setState({expandedIds: newIds})
   }
 
