@@ -108,7 +108,7 @@ body {
 }
 
 .Analyzer .TreeCell {
-  width: 100px;
+  width: 110px;
   padding: 0 10px;
   text-align: right;
   /** Make it easier to read on gradient background. */
