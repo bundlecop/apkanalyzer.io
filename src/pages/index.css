@@ -146,3 +146,14 @@ h1 {
 h1 svg {
   vertical-align: bottom;
 }
+
+.blinking {
+  animation: blinking 1s infinite;
+}
+.blinking:hover {
+  animation: none;
+}
+
+@keyframes blinking {
+  50% { transform: scale(1.05); }
+}

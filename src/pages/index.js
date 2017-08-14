@@ -14,7 +14,8 @@ import AndroidIcon from './android.svgc';
 
 export default class IndexPage extends React.Component {
   state = {
-    diffTree: null
+    diffTree: null,
+    isDemo: false
   };
 
   render() {
@@ -35,6 +36,15 @@ export default class IndexPage extends React.Component {
     const intlFormat = new Intl.NumberFormat({ style: 'percent' });
 
     return <div className="AnalyzerScreen">
+    <DropZone
+      multiple={false}
+      disableClick={true}
+      ref="compareDropzone"
+      acceptClassName="Analyzer-DropZone--accepting"
+      className="Analyzer-DropZone"
+      onDrop={this.handleCompareDrop}
+      style={{}}
+    >
       <div className="Header">
         <h1 style={{flex: 1}}>
           <AndroidIcon /> APK Analyzer
@@ -43,9 +53,9 @@ export default class IndexPage extends React.Component {
           Start over
         </button>
 
-        <button>
+        {!hasRight && <button onClick={this.handleCompare} className={this.state.isDemo ? 'blinking' : null}>
           Compare with another APK
-        </button>
+        </button>}
       </div>
       <div className="Analyzer">
         <Tree
@@ -79,16 +89,18 @@ export default class IndexPage extends React.Component {
               percentOfTotalDiff = Math.abs((diffBytes / fullSizeDiff * 100));
             }
 
-            let classNames;
-            if (!right) {
-              classNames = ['removed'];
-            } else if (!left) {
-              classNames = ['added'];
-            }
-            if (diffBytes !== 0) {
-              classNames = ['changed', diffBytes > 0 ? 'increased' : 'decreased' ]
-            } else {
-              classNames = ['unchanged']
+            let classNames = [];
+            if (hasRight) {
+              if (!right) {
+                classNames = ['removed'];
+              } else if (!left) {
+                classNames = ['added'];
+              }
+              if (diffBytes !== 0) {
+                classNames = ['changed', diffBytes > 0 ? 'increased' : 'decreased' ]
+              } else {
+                classNames = ['unchanged']
+              }
             }
 
             return <div
@@ -147,6 +159,7 @@ export default class IndexPage extends React.Component {
         Brought to you by <a href="https://bundlecop.com">BundleCop</a>.
         You can find the source code of this tool <a href="https://github.com/bundlecop/apkanalyzer.io">on Github</a>.
       </div>
+      </DropZone>
     </div>
   }
 
@@ -217,7 +230,8 @@ export default class IndexPage extends React.Component {
 
   handleTrySample = (e) => {
     e.preventDefault();
-    this.open(SampleAPK, SampleAPK2);
+    this.open(SampleAPK);
+    this.setState(state => ({isDemo: true}))
   }
 
   onDrop = async files => {
@@ -235,6 +249,31 @@ export default class IndexPage extends React.Component {
     }
   }
 
+  handleCompareDrop = async files => {
+    const file = await readZip(files[0]);
+    this.addToCompare(file);
+  }
+
+  handleCompare = () => {
+    if (this.state.isDemo) {
+      this.addToCompare(SampleAPK2);
+    }
+    else {
+      this.refs.compareDropzone.open();
+    }
+  }
+
+  addToCompare = (rightContents) => {
+    const rightTree = treeFromFlatPathList(rightContents, 'name', {nameAttribute: 'relName'});
+    const leftTree = this.state.leftTree;
+    const mergedTree = diffTrees(leftTree, rightTree);
+
+    fillTree(mergedTree);
+    sortBySize(mergedTree);
+    console.log(mergedTree);
+    this.setState({diffTree: mergedTree});
+  }
+
   open(contentsLeft, contentsRight) {
     let leftTree = treeFromFlatPathList(contentsLeft, 'name', {nameAttribute: 'relName'});
     let rightTree;
@@ -246,7 +285,7 @@ export default class IndexPage extends React.Component {
     fillTree(mergedTree);
     sortBySize(mergedTree)
 
-    this.setState({diffTree: mergedTree});
+    this.setState({diffTree: mergedTree, leftTree});
   }
 }
 
@@ -316,8 +355,16 @@ function sortBySize(node) {
 
 // Fill in the missing sums
 function fillTree(node) {
-  // Check if we have to do something at all.
-  if (node.left && node.left.compressedSize || node.right && node.right.compressedSize) {
+  // Check if we have to do something at all. This is carefully
+  // calibrated! It's possible that we add the size sums on the left
+  // first, and only later attach the right tree. In that case, we
+  // now have to calculate the right size, too. But we should never
+  // override any values that were read from the file.
+  const hasLeftSize = node.left && node.left.compressedSize;
+  const hasRightSize = node.right && node.right.compressedSize;
+  const hasChildren = (node.left && node.left.children.length > 0) ||
+    (node.right && node.right.children.length > 0);
+  if (hasLeftSize && hasRightSize || !hasChildren) {
     return node;
   }
 
