@@ -52,9 +52,9 @@ export default class IndexPage extends React.Component {
           data={this.state.diffTree}
           className={"Analyzer-Tree"}
           expandedIds={this.state.expandedIds}
-          header={(props) => {
+          headerComponent={(props) => {
             if (!hasRight) { return null; }
-            return <div className="TreeItem">
+            return <div className="TreeItem TreeItem--header">
               <div style={{flex: 1, textOverflow: 'ellipsis'}}>
               </div>
               <div className="TreeCell">
@@ -62,6 +62,9 @@ export default class IndexPage extends React.Component {
               </div>
               {hasRight && <div className="TreeCell">
                 Size Right
+              </div>}
+              {hasRight && <div className="TreeCell">
+                Diff
               </div>}
             </div>
           }}

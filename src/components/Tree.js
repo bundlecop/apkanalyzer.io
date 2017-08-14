@@ -17,7 +17,7 @@ export default class Tree extends React.Component {
   }
 
   render() {
-    const {getChildren, getId, expandedIds, rowComponent: RowComponent, data} = this.props;
+    const {getChildren, headerComponent: HeaderComponent, getId, expandedIds, rowComponent: RowComponent, data} = this.props;
 
     const elems = [];
     function build(children, level, parentIdx) {
@@ -45,6 +45,7 @@ export default class Tree extends React.Component {
     build(getChildren(data), 0, "r")
 
     return <div className="Tree">
+      {HeaderComponent && <HeaderComponent />}
       {elems}
     </div>
   }

@@ -77,6 +77,13 @@ body {
   overflow: hidden;
 }
 
+
+.Analyzer .TreeItem--header {
+  font-size: 0.5em;
+  color: silver;
+  text-transform: uppercase;
+}
+
 .Analyzer .TreeItem--hasChildren {
   cursor: pointer;
 }
